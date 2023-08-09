@@ -3,6 +3,7 @@ import telebot
 from telebot import types
 from khayyam import JalaliDate
 import gtts
+import qrcode
 
 #----------------------------------------------------------------------------------------------- moteqayer
 
@@ -97,6 +98,7 @@ def voice_mode ( message ) :
   bot.reply_to ( message , " اطلاعاتی که میخواهی در غالب یک QRCode ذخیره کنی را وارد کن " )
   bot.send_message ( message.chat.id , " اطلاعات می تواند به هر زبانی باشد " , reply_markup = back_keybord )
   mode = "QR_code"
+
 #------------------------------------------------------------------------------------------------------ main
 
 @bot.message_handler ( func = lambda m : True )
@@ -140,14 +142,38 @@ def play_game ( message ) :
       mode = " "
 
     elif mode == "max" :
-      bot.reply_to (message,"done1")
-
+      array = []
+      user_input = message.text.split (",")
+      for number in user_input :
+        array.append ( int ( number ) )
+      Array = sorted ( array )
+      text = " بزرگترین عدد در این مجموعه " + str ( Array [ len ( array ) - 1]) + " است "
+      bot.send_message ( message.chat.id , text , reply_markup = main_keyboard )
+      mode = " "
+      
     elif mode == "argmax" :
-      bot.reply_to (message,"done2")
+      array = []
+      user_input = message.text.split (",")
+      for number in user_input :
+        array.append ( int ( number ))
+      max_number = array[0]
+      index = 0
+      for i in range ( 1 , len ( array )) :
+        if max_number <= array [ i ] :
+          max_number = array [ i ]
+          index = i
+      text = " بزرگترین عدد در این مجموعه دارای اندیس " + str ( index ) + " است "
+      bot.send_message ( message.chat.id , text , reply_markup = main_keyboard )
+      mode = " "
 
     elif mode == "QR_code" :
       bot.reply_to (message,"done3")
-
-
+      user_input = ( message.text)
+      qr_photo = qrcode.make ( user_input )
+      qr_photo.save ( "qr_photo.png" )
+      aks = open ( "qr_photo.png" , "rb" )
+      bot.reply_to (message,"done3")
+      bot.send_photo ( message.chat.id , aks , reply_markup = main_keyboard )
+      mode = " "
 
 bot.infinity_polling ()
