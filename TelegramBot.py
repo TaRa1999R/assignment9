@@ -167,6 +167,7 @@ def play_game ( message ) :
       mode = " "
 
     elif mode == "QR_code" :
+      
       user_input = ( message.text)
       qr_photo = qrcode.make ( user_input )
       qr_photo.save ( "qr_photo.png" )
