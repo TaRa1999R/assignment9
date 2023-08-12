@@ -167,12 +167,10 @@ def play_game ( message ) :
       mode = " "
 
     elif mode == "QR_code" :
-      bot.reply_to (message,"done3")
       user_input = ( message.text)
       qr_photo = qrcode.make ( user_input )
       qr_photo.save ( "qr_photo.png" )
       aks = open ( "qr_photo.png" , "rb" )
-      bot.reply_to (message,"done3")
       bot.send_photo ( message.chat.id , aks , reply_markup = main_keyboard )
       mode = " "
 
